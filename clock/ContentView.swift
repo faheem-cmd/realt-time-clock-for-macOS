@@ -1,26 +1,40 @@
-//
-//  ContentView.swift
-//  clock
-//
-//  Created by FAHEEM on 03/04/23.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State var time = Date()
+    @State var color = Color.red
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("\(time, formatter: dateFormatter)")
+                .font(.system(size: 80))
+                .foregroundColor(color)
+                .padding(.top, 50)
+            Button("Change Color") {
+                self.color = Color.random()
+            }
+            .padding(.top, 50)
         }
-        .padding()
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+        .background(Color.black.edgesIgnoringSafeArea(.all))
+        .onAppear(perform: {
+            let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.time = Date()
+            }
+            RunLoop.current.add(timer, forMode: .common)
+        })
+    }
+    
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .medium
+        return formatter
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+extension Color {
+    static func random() -> Color {
+        return Color(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1))
     }
 }
+
