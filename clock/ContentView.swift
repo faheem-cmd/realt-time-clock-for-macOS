@@ -1,40 +1,33 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var time = Date()
-    @State var color = Color.red
+    @State private var time = ""
+    @State private var textColor = Color.white
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple, .pink]
     
     var body: some View {
-        VStack {
-            Text("\(time, formatter: dateFormatter)")
-                .font(.system(size: 80))
-                .foregroundColor(color)
-                .padding(.top, 50)
-            Button("Change Color") {
-                self.color = Color.random()
+        Text(time)
+            .font(.system(size: 80, weight:.regular))
+            .foregroundColor(textColor)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.black)
+            .edgesIgnoringSafeArea(.all)
+            .onReceive(timer) { _ in
+                let formatter = DateFormatter()
+                formatter.timeStyle = .medium
+                self.time = formatter.string(from: Date())
+                self.textColor = colors.randomElement() ?? .white
+                
             }
-            .padding(.top, 50)
-        }
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-        .background(Color.black.edgesIgnoringSafeArea(.all))
-        .onAppear(perform: {
-            let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-                self.time = Date()
-            }
-            RunLoop.current.add(timer, forMode: .common)
-        })
-    }
-    
-    var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .medium
-        return formatter
     }
 }
 
-extension Color {
-    static func random() -> Color {
-        return Color(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1))
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }
 
