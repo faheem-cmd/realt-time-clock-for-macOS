@@ -1,1 +1,1 @@
-# screen-saver-app-for-macOS
+# screen-saver-application-for-macOS
