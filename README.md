@@ -1,1 +1,1 @@
-# screen-saver-application-for-macOS
+# screen-saver-clock-application-for-macOS
